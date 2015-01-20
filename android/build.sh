@@ -84,7 +84,7 @@ pull_webrtc() {
     then
         echo "gclient sync with newest"
         # fetch webrtc from Git repo.
-        fetch webrtc
+        fetch webrtc_android
     else
         echo "sync certain revision function is disabled, please revisit build.sh in webrtc-build-script"
         # echo "gclient sync with $1"

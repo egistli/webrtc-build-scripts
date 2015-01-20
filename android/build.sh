@@ -1,5 +1,5 @@
 # !/bin/bash
-# Copyright Pristine Inc 
+# Copyright Pristine Inc
 # Author: Rahul Behera <rahul@pristine.io>
 # Author: Aaron Alaniz <aaron@pristine.io>
 # Author: Arik Yaacob   <arik@pristine.io>
@@ -90,21 +90,18 @@ pull_webrtc() {
     create_directory_if_not_found $WEBRTC_ROOT
     cd $WEBRTC_ROOT
 
-    # Ensure our target os is correct building android
-    echo Configuring gclient for Android build
-	gclient config --name=src http://webrtc.googlecode.com/svn/trunk
-	echo "target_os = ['unix', 'android']" >> .gclient
-
     # Get latest webrtc source
 	echo Pull down the latest from the webrtc repo
 	echo this can take a while
 	if [ -z $1 ]
     then
         echo "gclient sync with newest"
-        gclient sync
+        # fetch webrtc from Git repo.
+        fetch webrtc
     else
-        echo "gclient sync with $1"
-        gclient sync -r $1
+        echo "sync certain revision function is disabled, please revisit build.sh in webrtc-build-script"
+        # echo "gclient sync with $1"
+        # gclient sync -r $1
     fi
 
     # Navigate back
@@ -220,14 +217,14 @@ execute_build() {
     ARCH_OUT="out_android_${ARCH}"
     echo "Build ${WEBRTC_TARGET} in $BUILD_TYPE (arch: ${WEBRTC_ARCH:-arm})"
     exec_ninja "$ARCH_OUT/$BUILD_TYPE"
-    
+
     REVISION_NUM=`get_webrtc_revision`
     # Verify the build actually worked
     if [ $? -eq 0 ]; then
         SOURCE_DIR="$WEBRTC_ROOT/src/$ARCH_OUT/$BUILD_TYPE"
         TARGET_DIR="$BUILD/$BUILD_TYPE"
         create_directory_if_not_found "$TARGET_DIR"
-        
+
         rm "$TARGET_DIR/$REVISION_NUM.zip" || true
 
         echo "Copy JAR File"
@@ -237,7 +234,7 @@ execute_build() {
         ARCH_JNI="$TARGET_DIR/jniLibs/${ARCH}"
         create_directory_if_not_found $ARCH_JNI
 
-        cp -p "$SOURCE_DIR/libjingle_peerconnection.jar" "$TARGET_DIR/libs/" 
+        cp -p "$SOURCE_DIR/libjingle_peerconnection.jar" "$TARGET_DIR/libs/"
 
         $STRIP -o $ARCH_JNI/libjingle_peerconnection_so.so $WEBRTC_ROOT/src/$ARCH_OUT/$BUILD_TYPE/lib/libjingle_peerconnection_so.so -s
 
@@ -248,10 +245,10 @@ execute_build() {
         zip -r "$TARGET_DIR/$REVISION_NUM.zip" .
         cd $WORKING_DIR
 
-        
+
         echo "$BUILD_TYPE build for apprtc complete for revision $REVISION_NUM"
     else
-        
+
         echo "$BUILD_TYPE build for apprtc failed for revision $REVISION_NUM"
     fi
 }

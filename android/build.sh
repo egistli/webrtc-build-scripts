@@ -81,11 +81,16 @@ pull_webrtc() {
 	echo this can take a while
 
 	# fetch webrtc from Git repo.
-	git fetch origin
 	if [ -z $1 ]
     then
-        git checkout develop
+        fetch webrtc_android
+        cd $WEBRTC_ROOT/src
+        git remote add hooloop https://github.com/Invisibi/webrtc.git
+        git fetch --all
+        git checkout hooloop/develop
     else
+        cd $WEBRTC_ROOT/src
+        git fetch --all
         git checkout $1
     fi
 

@@ -77,18 +77,16 @@ pull_webrtc() {
     create_directory_if_not_found $WEBRTC_ROOT
     cd $WEBRTC_ROOT
 
-    # Get latest webrtc source
 	echo Pull down the latest from the webrtc repo
 	echo this can take a while
+
+	# fetch webrtc from Git repo.
+	git fetch origin
 	if [ -z $1 ]
     then
-        echo "gclient sync with newest"
-        # fetch webrtc from Git repo.
-        fetch webrtc_android
+        git checkout develop
     else
-        echo "sync certain revision function is disabled, please revisit build.sh in webrtc-build-script"
-        # echo "gclient sync with $1"
-        # gclient sync -r $1
+        git checkout $1
     fi
 
     # Navigate back

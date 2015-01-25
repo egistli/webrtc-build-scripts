@@ -262,11 +262,11 @@ build_apprtc() {
     #prepare_gyp_defines &&
     #execute_build
 
-    export WEBRTC_ARCH=x86
-    prepare_gyp_defines &&
-    execute_build
+    # export WEBRTC_ARCH=x86
+    #prepare_gyp_defines &&
+    #execute_build
 
-    export WEBRTC_ARCH=x86_64
-    prepare_gyp_defines &&
-    execute_build
+    #export WEBRTC_ARCH=x86_64
+    #prepare_gyp_defines &&
+    #execute_build
 }
